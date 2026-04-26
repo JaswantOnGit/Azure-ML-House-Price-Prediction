@@ -1,10 +1,8 @@
-# Azure ML House Price Prediction
-
 # 🏡 Azure ML Housing Price Prediction (End-to-End)
 
 ## 🚀 Project Overview
 
-This project demonstrates an **end-to-end Machine Learning solution on Microsoft Azure**, from data ingestion to real-time model deployment.
+This project demonstrates an **end to end Machine Learning solution on Microsoft Azure**, from data ingestion to real-time model deployment.
 
 As a **Technical Project Manager**, I built this to bridge the gap between:
 
