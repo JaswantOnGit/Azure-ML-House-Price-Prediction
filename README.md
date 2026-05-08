@@ -2,135 +2,141 @@
 
 ## 🚀 Project Overview
 
-This project demonstrates an **end to end Machine Learning solution on Microsoft Azure**, from data ingestion to real-time model deployment.
-
-As a **Technical Project Manager**, I built this to bridge the gap between:
-
-* AI/ML theory
-* Real-world cloud delivery challenges
-
----
+This project demonstrates an **end-to-end Machine Learning solution on Microsoft Azure**, from data ingestion through Azure Blob Storage to a live real-time prediction API — built and delivered by a Technical Project Manager to bridge AI/ML theory with real-world cloud delivery.
 
 ## 🎯 Business Problem
 
-Real estate stakeholders need accurate property price predictions to:
-
-* Improve pricing strategies
-* Reduce investment risk
-* Enable data-driven decisions
-
----
+Real estate stakeholders need accurate property price predictions to improve pricing strategies, reduce investment risk, and enable data-driven decisions.
 
 ## 🧠 Solution Architecture
 
-![Architecture](architecture/architecture-diagram.png)
+![Architecture](architecture-diagram.png)
 
-Pipeline:
-
+**Pipeline:**
 1. Data ingestion from Azure Blob Storage
-2. Dataset registration in Azure ML
-3. AutoML regression experiment
-4. Model selection (based on RMSE)
-5. Real-time endpoint deployment
-6. API consumption via Python
-
----
+2. Dataset registration in Azure ML Studio
+3. AutoML regression experiment (25 trials, 5-fold CV)
+4. Best model selection based on Normalized RMSE
+5. Real-time managed endpoint deployment
+6. API consumption via Python (Jupyter Notebook)
 
 ## ⚙️ Tech Stack
 
-* Azure Machine Learning
-* AutoML (Regression)
-* LightGBM, XGBoost, ElasticNet
-* Azure Blob Storage
-* REST API
-* Python (Jupyter Notebook)
+| Layer | Technology |
+|-------|-----------|
+| Cloud Platform | Azure Machine Learning (Microsoft Foundry) |
+| ML Training | AutoML (Regression) |
+| Best Model | MaxAbsScaler + ElasticNet |
+| Storage | Azure Blob Storage |
+| Compute | Standard_D2a_v4 (Azure ML Compute Cluster) |
+| Inference | Azure Managed Online Endpoint (REST API) |
+| Notebook | Python 3.10 — Jupyter Lab (Azure ML) |
 
----
+## 📊 Model Results
 
-## 📊 Model Details
+**Experiment:** `house_price_predictor`  
+**Task:** Regression  
+**Target:** Housing Price (INR)  
+**Primary Metric:** Normalized RMSE  
 
-* Task: Regression
-* Target: Housing Price
-* Metric: Normalized RMSE
-* Best Model: LightGBM (AutoML selected)
+| Rank | Algorithm | Normalized RMSE | Sampling |
+|------|-----------|----------------|----------|
+| 🥇 1 | MaxAbsScaler, ElasticNet | **0.09541** | 100% |
+| 2 | StandardScalerWrapper, ElasticNet | 0.09542 | 100% |
+| 3 | TruncatedSVDWrapper, ElasticNet | 0.09543 | 100% |
 
----
+*AutoML evaluated 8 pages of model candidates (25/page) across LightGBM, XGBoost, ElasticNet, and ensemble variants.*
 
 ## 🚀 Deployment
 
-* Real-time endpoint deployed on Azure
-* VM: Standard_D2a_v4
-* REST API used for live predictions
+| Property | Value |
+|----------|-------|
+| Endpoint Name | `housingpriceprediction-bvjxd` |
+| Deployment | `housepricepredi103-1` |
+| Provisioning State | ✅ Succeeded |
+| Compute Type | Managed |
+| Live Traffic | 100% |
 
----
+### Screenshots
 
-## 🔗 API Example
+**AutoML Run — Models + Child Jobs**
+![AutoML Run](automl-run.png)
+
+**Endpoint Deployment**
+![Endpoint](endpoint.png)
+
+**Live API Prediction Output**
+![API Output](api-prediction-output.png)
+
+## 🔗 API Usage
 
 ```python
-import requests
+import urllib.request, json
 
-url = "YOUR_ENDPOINT_URL"
-headers = {"Authorization": "Bearer YOUR_KEY"}
+url     = "https://housingpriceprediction-bvjxd.australiaeast.inference.ml.azure.com/score"
+api_key = "<your-endpoint-key>"
 
 data = {
-    "data": [
-        {
-            "sqft": 2000,
-            "bedrooms": 3,
-            "location": "urban"
-        }
-    ]
+    "input_data": {
+        "columns": [
+            "sqft_living", "sqft_lot", "bedrooms", "bathrooms",
+            "floors", "waterfront", "view", "condition",
+            "grade", "yr_built", "yr_renovated", "zipcode",
+            "lat", "long", "sqft_above", "sqft_basement", "location_type"
+        ],
+        "data": [
+            [2000, 5000, 3, 2, 1, 0, 0, 3, 7, 2000, 0, 98052, 47.6, -122.1, 2000, 0, "suburban"]
+        ]
+    }
 }
 
-response = requests.post(url, json=data, headers=headers)
-print(response.json())
+body = json.dumps(data).encode("utf-8")
+req  = urllib.request.Request(url, body)
+req.add_header("Content-Type", "application/json")
+req.add_header("Authorization", f"Bearer {api_key}")
+
+result = urllib.request.urlopen(req)
+result_json = json.loads(result.read().decode("utf-8"))
+print(f"Predicted price of the house: {int(round(result_json[0]))}")
+# Output: Predicted price of the house: 5300006
 ```
 
----
+## 📁 Repository Structure
 
-## 📸 Screenshots
+```
+Azure-ML-House-Price-Prediction/
+├── azure_ml_housing_price_prediction.ipynb  # Full end-to-end notebook
+├── requirements.txt                          # Python dependencies
+├── .gitignore                                # Git ignore rules
+├── architecture-diagram.png                  # Solution architecture
+├── automl-run.png                            # AutoML experiment screenshot
+├── endpoint.png                              # Endpoint deployment screenshot
+├── api-prediction-output.png                 # Live prediction output screenshot
+└── data/
+    └── sample_housing_data.csv               # Sample dataset (20 rows)
+```
 
-### AutoML Run
+## 🏃 How to Run
 
-![AutoML](screenshots/automl-run.png)
+```bash
+# 1. Clone the repo
+git clone https://github.com/JaswantOnGit/Azure-ML-House-Price-Prediction.git
+cd Azure-ML-House-Price-Prediction
 
-### Endpoint Deployment
+# 2. Install dependencies
+pip install -r requirements.txt
 
-![Endpoint](screenshots/endpoint.png)
+# 3. Open the notebook
+jupyter notebook azure_ml_housing_price_prediction.ipynb
 
----
+# 4. Update SUBSCRIPTION_ID, RESOURCE_GROUP, and WORKSPACE_NAME in Cell 2
+# 5. Run cells sequentially
+```
 
 ## 💡 Key Learnings (PM Perspective)
 
-* 💰 Cost governance in cloud ML is critical
-* ⚠️ Quota & region issues = delivery risks
-* 🚀 Deployment is harder than training
-* 🔄 DS → Engineering handoff requires strong ownership
-
----
-
-## 🧹 Cost Optimization
-
-* Decommissioned resource group after testing
-* Avoided unnecessary compute charges
-
----
-
-## 📁 Documentation
-
-Full project walkthrough available here:
-📄 docs/project-walkthrough.pdf
-
----
-
-## 👤 About Me
-
-Jaswant Singh
-Technical Project Manager | AI & Cloud Enthusiast
-
-Open to:
-
-* Senior TPM roles
-* AI/ML Delivery roles
-
----
+- 💰 **Cost governance** in cloud ML is critical — decommissioned resources immediately after testing
+- ⚠️ **Quota & region constraints** are real delivery risks in enterprise ML projects
+- 🚀 **Deployment is harder than training** — managing endpoints, traffic allocation, and auth requires careful orchestration
+- 🔄 **DS → Engineering handoff** requires strong ownership and clear API contracts
+- 📊 **AutoML democratizes modeling** but a PM still needs to validate metric choices and business alignment
