@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Azure ML / credentials
+.azureml/
+config.json
+*.pem
+*.key
+*_key.txt
+azure_credentials.json
+
+# Data (large files - keep only sample)
+*.csv
+!data/sample_housing_data.csv
+
+# Model artifacts
+*.pkl
+*.joblib
+*.pt
+*.h5
+outputs/
+model/
+
+# OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
