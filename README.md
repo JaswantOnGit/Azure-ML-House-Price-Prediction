@@ -1,12 +1,12 @@
-# 🏡 Azure ML Housing Price Prediction (End-to-End)
+# 🏡 Azure ML Housing Price Prediction (End to End)
 
 ## 🚀 Project Overview
 
-This project demonstrates an **end-to-end Machine Learning solution on Microsoft Azure**, from data ingestion through Azure Blob Storage to a live real-time prediction API — built and delivered by a Technical Project Manager to bridge AI/ML theory with real-world cloud delivery.
+This project demonstrates an **end-to-end Machine Learning solution on Microsoft Azure**, from data ingestion through Azure Blob Storage to a live real-time prediction API — built and delivered by a Technical Project Manager to bridge AI/ML theory with real world cloud delivery.
 
 ## 🎯 Business Problem
 
-Real estate stakeholders need accurate property price predictions to improve pricing strategies, reduce investment risk, and enable data-driven decisions.
+Real estate stakeholders need accurate property price predictions to improve pricing strategies, reduce investment risk, and enable data driven decisions.
 
 ## 🧠 Solution Architecture
 
